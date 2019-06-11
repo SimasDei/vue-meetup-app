@@ -1,23 +1,21 @@
 <template>
   <div id="app">
-    <TheNavbar />
-    <PageHome />
-    <TheFooter />
+    <TheNavbar/>
+    <router-view></router-view>
+    <TheFooter/>
   </div>
 </template>
 
 <script>
-import  PageHome from '@/pages/PageHome'
-import TheNavbar from '@/components/shared/TheNavbar'
-import TheFooter from '@/components/shared/TheFooter'
+import TheNavbar from '@/components/shared/TheNavbar';
+import TheFooter from '@/components/shared/TheFooter';
 export default {
   name: 'app',
   components: {
-    PageHome,
     TheNavbar,
-    TheFooter
-  }
-}
+    TheFooter,
+  },
+};
 </script>
 
 <style lang="scss">
@@ -47,7 +45,8 @@ export default {
   padding: 3rem 1.5rem;
 }
 .hero-bg {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1531263060782-b024de9b9793?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url('https://images.unsplash.com/photo-1531263060782-b024de9b9793?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80');
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

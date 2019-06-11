@@ -13,8 +13,8 @@
             <div class="level-item has-text-centered">
               <div>
                 <!-- Meetup Start Date, Format with moment -->
-                <p class="title">JAN</p>
-                <p class="title">16</p>
+                <p class="title">{{meetup.startDate | formatDate('MMM')}}</p>
+                <p class="title">{{meetup.startDate | formatDate('D')}}</p>
               </div>
             </div>
           </div>
