@@ -1,6 +1,6 @@
 <template>
   <div class="column is-one-third">
-    <router-link class="card large" :to="`/meetups/${meetup._id}`">
+    <router-link class="card large" tag="div" :to="`/meetups/${meetup._id}`">
       <div class="card-image">
         <figure class="image is-4by3">
           <!-- Meetup image -->
@@ -46,3 +46,8 @@ export default {
 };
 </script>
 
+<style scoped>
+.card.large:hover {
+  cursor: pointer;
+}
+</style>
