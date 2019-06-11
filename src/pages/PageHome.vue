@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex';
 
 import CategoryItem from '@/components/CategoryItem.vue';
 import MeetupItem from '@/components/MeetupItem.vue';
@@ -39,26 +39,15 @@ export default {
     CategoryItem,
     MeetupItem,
   },
-  data() {
-    return {
-      meetups: [],
-      categories: [],
-    };
-  },
   created() {
-    axios
-      .get('/api/v1/meetups')
-      .then(res => {
-        this.meetups = res.data;
-      })
-      .catch(error => console.log(error));
-
-    axios
-      .get('/api/v1/categories')
-      .then(res => {
-        this.categories = res.data;
-      })
-      .catch(error => console.log(error));
+    this.fetchMeetups();
+    this.fetchCategories();
+  },
+  computed: {
+    ...mapGetters(['meetups', 'categories']),
+  },
+  methods: {
+    ...mapActions(['fetchMeetups', 'fetchCategories']),
   },
 };
 </script>
