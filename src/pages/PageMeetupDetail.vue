@@ -139,34 +139,22 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'PageMeetupDetail',
-  data() {
-    return {
-      meetup: {},
-      threads: [],
-    };
-  },
   created() {
     const meetupId = this.$route.params.id;
-    axios
-      .get(`/api/v1/meetups/${meetupId}`)
-      .then(res => {
-        this.meetup = res.data;
-      })
-      .catch(error => console.log(error));
-
-    axios
-      .get(`/api/v1/threads?meetupId=${meetupId}`)
-      .then(res => (this.threads = res.data))
-      .catch(error => console.log(error));
+    this.fetchMeetup(meetupId);
   },
   computed: {
+    ...mapGetters(['meetup', 'threads']),
     meetupCreator() {
       return this.meetup.meetupCreator;
     },
+  },
+  methods: {
+    ...mapActions(['fetchMeetup']),
   },
 };
 </script>

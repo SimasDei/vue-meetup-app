@@ -66,19 +66,18 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'PageMeetupFind',
-  data() {
-    return {
-      meetups: [],
-    };
-  },
   created() {
-    axios.get('/api/v1/meetups').then(res => {
-      this.meetups = res.data;
-    });
+    this.fetchMeetups();
+  },
+  computed: {
+    ...mapGetters(['meetups']),
+  },
+  methods: {
+    ...mapActions(['fetchMeetups']),
   },
 };
 </script>
