@@ -1,6 +1,6 @@
 <template>
   <div class="column is-one-third">
-    <div class="card large">
+    <router-link class="card large" :to="`/meetups/${meetup._id}`">
       <div class="card-image">
         <figure class="image is-4by3">
           <!-- Meetup image -->
@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 <script>
