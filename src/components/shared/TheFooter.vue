@@ -2,15 +2,14 @@
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        <strong>VueMeetuper</strong> by <a href="https://jgthms.com">Filip Jerga</a>. The source code is licensed.
+        <strong>&copy; Vue Meetup App 2019</strong>
       </p>
     </div>
   </footer>
 </template>
 
 <script>
-  export default {
-  }
+export default {};
 </script>
 
 <style scoped>
