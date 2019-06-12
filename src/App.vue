@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <TheNavbar/>
-    <router-view></router-view>
+    <main class="page-wrapper">
+      <router-view></router-view>
+    </main>
     <TheFooter/>
   </div>
 </template>
@@ -27,6 +29,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.page-wrapper {
+  min-height: 62vh;
 }
 
 .bold {

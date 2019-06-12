@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="dataLoaded">
     <AppHero/>
     <div class="container">
       <section class="section">
@@ -25,6 +25,7 @@
       </section>
     </div>
   </div>
+  <app-spinner v-else></app-spinner>
 </template>
 
 <script>
@@ -39,9 +40,19 @@ export default {
     CategoryItem,
     MeetupItem,
   },
+  data() {
+    return {
+      dataLoaded: false,
+    };
+  },
   created() {
-    this.fetchMeetups();
-    this.fetchCategories();
+    this.fetchMeetups().then(() =>
+      this.fetchCategories().then(() =>
+        setTimeout(() => {
+          this.dataLoaded = true;
+        }, 1500),
+      ),
+    );
   },
   computed: {
     ...mapGetters('meetups', ['meetups']),

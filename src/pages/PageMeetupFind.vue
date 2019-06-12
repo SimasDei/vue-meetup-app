@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="dataLoaded">
     <div class="lookup-prebody">
       <AppHero/>
       <div class="meetup-lookup-wrap">
@@ -63,6 +63,7 @@
       </section>
     </div>
   </div>
+  <app-spinner v-else></app-spinner>
 </template>
 
 <script>
@@ -70,14 +71,23 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'PageMeetupFind',
+  data() {
+    return {
+      dataLoaded: false,
+    };
+  },
   created() {
-    this.fetchMeetups();
+    this.fetchMeetups().then(() =>
+      setTimeout(() => {
+        this.dataLoaded = true;
+      }, 1500),
+    );
   },
   computed: {
-    ...mapGetters(['meetups']),
+    ...mapGetters('meetups', ['meetups']),
   },
   methods: {
-    ...mapActions(['fetchMeetups']),
+    ...mapActions('meetups', ['fetchMeetups']),
   },
 };
 </script>

@@ -1,5 +1,5 @@
   <template>
-  <div class="meetup-detail-page">
+  <div class="meetup-detail-page" v-if="dataLoaded">
     <section class="hero">
       <div class="hero-body">
         <div class="container">
@@ -137,16 +137,27 @@
       </div>
     </section>
   </div>
+  <app-spinner v-else></app-spinner>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'PageMeetupDetail',
+  data() {
+    return {
+      dataLoaded: false,
+    };
+  },
   created() {
     const meetupId = this.$route.params.id;
-    this.fetchMeetup(meetupId);
-    this.fetchThreads(meetupId);
+    this.fetchMeetup(meetupId).then(() =>
+      this.fetchThreads(meetupId).then(() =>
+        setTimeout(() => {
+          this.dataLoaded = true;
+        }, 1500),
+      ),
+    );
   },
   computed: {
     ...mapGetters('meetups', ['meetup']),
@@ -277,8 +288,6 @@ li {
 .media-left.user-image {
   margin: 0;
   margin-right: 15px;
-}
-.post-item {
 }
 .media + .media {
   border: none;
