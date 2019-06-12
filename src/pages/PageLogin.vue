@@ -20,6 +20,10 @@
                     autocomplete="email"
                     v-model="form.email"
                   >
+                  <div class="form-error" v-if="$v.form.email.$error">
+                    <span class="help is-danger" v-if="!$v.form.email.required">Email is Required</span>
+                    <span class="help is-danger" v-if="!$v.form.email.email">Invalid email address</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
@@ -31,6 +35,9 @@
                     autocomplete="current-password"
                     v-model="form.password"
                   >
+                  <div class="form-error" v-if="$v.form.password.$error">
+                    <span class="help is-danger">Password is Required</span>
+                  </div>
                 </div>
               </div>
               <button class="button is-block is-info is-large is-fullwidth">Login</button>
@@ -49,6 +56,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -59,6 +67,17 @@ export default {
       },
     };
   },
+  validations: {
+    form: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+    },
+  },
   computed: {
     ...mapGetters('auth', ['user']),
   },
@@ -66,7 +85,11 @@ export default {
     ...mapActions('auth', ['login']),
     onSubmit(e) {
       e.preventDefault();
-      this.login(this.form);
+      this.$v.form.$touch();
+
+      if (!this.$v.form.email.$error && !this.$v.form.password.$error) {
+        this.login(this.form);
+      }
     },
   },
 };
