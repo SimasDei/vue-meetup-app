@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataLoaded">
+  <div v-if="pageLoader_dataLoaded">
     <div class="lookup-prebody">
       <AppHero/>
       <div class="meetup-lookup-wrap">
@@ -68,6 +68,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import pageLoader from '@/mixins/pageLoader';
 
 export default {
   name: 'PageMeetupFind',
@@ -76,10 +77,11 @@ export default {
       dataLoaded: false,
     };
   },
+  mixins: [pageLoader],
   created() {
     this.fetchMeetups().then(() =>
       setTimeout(() => {
-        this.dataLoaded = true;
+        this.pageLoader_resolveData();
       }, 1500),
     );
   },

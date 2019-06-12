@@ -1,5 +1,5 @@
   <template>
-  <div class="meetup-detail-page" v-if="dataLoaded">
+  <div class="meetup-detail-page" v-if="pageLoader_dataLoaded">
     <section class="hero">
       <div class="hero-body">
         <div class="container">
@@ -141,23 +141,25 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import pageLoader from '@/mixins/pageLoader';
 
 export default {
   name: 'PageMeetupDetail',
-  data() {
-    return {
-      dataLoaded: false,
-    };
-  },
+  mixins: [pageLoader],
   created() {
     const meetupId = this.$route.params.id;
-    this.fetchMeetup(meetupId).then(() =>
-      this.fetchThreads(meetupId).then(() =>
-        setTimeout(() => {
-          this.dataLoaded = true;
-        }, 1500),
-      ),
-    );
+    this.fetchMeetup(meetupId)
+      .then(() =>
+        this.fetchThreads(meetupId).then(() =>
+          setTimeout(() => {
+            this.pageLoader_resolveData();
+          }, 1500),
+        ),
+      )
+      .catch(error => {
+        console.log(error);
+        this.dataLoaded = true;
+      });
   },
   computed: {
     ...mapGetters('meetups', ['meetup']),

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="dataLoaded">
+  <div v-if=" pageLoader_dataLoaded">
     <AppHero/>
     <div class="container">
       <section class="section">
@@ -30,6 +30,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import pageLoader from '@/mixins/pageLoader';
 
 import CategoryItem from '@/components/CategoryItem.vue';
 import MeetupItem from '@/components/MeetupItem.vue';
@@ -40,16 +41,12 @@ export default {
     CategoryItem,
     MeetupItem,
   },
-  data() {
-    return {
-      dataLoaded: false,
-    };
-  },
+  mixins: [pageLoader],
   created() {
     this.fetchMeetups().then(() =>
       this.fetchCategories().then(() =>
         setTimeout(() => {
-          this.dataLoaded = true;
+          this.pageLoader_resolveData();
         }, 1500),
       ),
     );
