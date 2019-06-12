@@ -9,25 +9,41 @@
             <figure class="avatar">
               <img src="https://placehold.it/128x128">
             </figure>
-            <form>
+            <form @submit="onSubmit">
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="text" placeholder="Username">
+                  <input
+                    class="input is-large"
+                    type="text"
+                    placeholder="Username"
+                    v-model="form.username"
+                  >
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="text" placeholder="Name">
+                  <input class="input is-large" type="text" placeholder="Name" v-model="form.name">
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="email" placeholder="Your Email">
+                  <input
+                    class="input is-large"
+                    type="email"
+                    placeholder="Your Email"
+                    v-model="form.email"
+                  >
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <input class="input is-large" type="text" placeholder="Avatar" autocomplete>
+                  <input
+                    class="input is-large"
+                    type="text"
+                    placeholder="Avatar"
+                    autocomplete
+                    v-model="form.avatar"
+                  >
                 </div>
               </div>
               <div class="field">
@@ -37,6 +53,7 @@
                     type="password"
                     placeholder="Your Password"
                     autocomplete="new-password"
+                    v-model="form.password"
                   >
                 </div>
               </div>
@@ -47,6 +64,7 @@
                     type="password"
                     placeholder="Password Confirmation"
                     autocomplete="off"
+                    v-model="form.password2"
                   >
                 </div>
               </div>
@@ -65,7 +83,32 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from 'vuex';
+
+export default {
+  data() {
+    return {
+      form: {
+        username: null,
+        name: null,
+        email: null,
+        avatar: null,
+        password: null,
+        password2: null,
+      },
+    };
+  },
+  computed: {
+    ...mapGetters('auth', ['user']),
+  },
+  methods: {
+    ...mapActions('auth', ['register']),
+    onSubmit(e) {
+      e.preventDefault();
+      this.register(this.form);
+    },
+  },
+};
 </script>
 
 <style scoped>

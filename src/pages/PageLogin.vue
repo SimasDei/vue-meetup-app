@@ -9,7 +9,7 @@
             <figure class="avatar">
               <img src="https://placehold.it/128x128">
             </figure>
-            <form>
+            <form @submit="onSubmit">
               <div class="field">
                 <div class="control">
                   <input
@@ -18,6 +18,7 @@
                     placeholder="Your Email"
                     autofocus
                     autocomplete="email"
+                    v-model="form.email"
                   >
                 </div>
               </div>
@@ -28,6 +29,7 @@
                     type="password"
                     placeholder="Your Password"
                     autocomplete="current-password"
+                    v-model="form.password"
                   >
                 </div>
               </div>
@@ -46,7 +48,28 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapGetters } from 'vuex';
+
+export default {
+  data() {
+    return {
+      form: {
+        email: null,
+        password: null,
+      },
+    };
+  },
+  computed: {
+    ...mapGetters('auth', ['user']),
+  },
+  methods: {
+    ...mapActions('auth', ['login']),
+    onSubmit(e) {
+      e.preventDefault();
+      this.login(this.form);
+    },
+  },
+};
 </script>
 
 <style scoped>

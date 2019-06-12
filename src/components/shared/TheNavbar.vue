@@ -28,10 +28,10 @@
 
           <div class="navbar-dropdown">
             <router-link class="navbar-item" to="/about">About</router-link>
-            <a class="navbar-item">Jobs</a>
-            <a class="navbar-item">Contact</a>
+            <router-link class="navbar-item" to="/jobs">Jobs</router-link>
+            <router-link class="navbar-item" to="/contact">Contact</router-link>
             <hr class="navbar-divider">
-            <a class="navbar-item">Report an issue</a>
+            <router-link class="navbar-item" to="/report">Report an issue</router-link>
           </div>
         </div>
       </div>
@@ -39,10 +39,10 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-primary">
+            <router-link class="button is-primary" to="/register">
               <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">Log in</a>
+            </router-link>
+            <router-link class="button is-light" to="/login">Log in</router-link>
           </div>
         </div>
       </div>
