@@ -8,7 +8,7 @@ export default {
   },
   mutations: {
     FETCH_CATEGORIES(state, categories) {
-      state.categories = categories;
+      state.items = categories;
     },
   },
   actions: {
@@ -22,5 +22,9 @@ export default {
         .catch(error => console.log(error));
     },
   },
-  getters: {},
+  getters: {
+    categories(state) {
+      return state.items;
+    },
+  },
 };

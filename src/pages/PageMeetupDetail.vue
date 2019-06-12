@@ -146,15 +146,19 @@ export default {
   created() {
     const meetupId = this.$route.params.id;
     this.fetchMeetup(meetupId);
+    this.fetchThreads(meetupId);
   },
   computed: {
-    ...mapGetters(['meetup', 'threads']),
+    ...mapGetters('meetups', ['meetup']),
+    ...mapGetters('threads', ['threads']),
+
     meetupCreator() {
       return this.meetup.meetupCreator;
     },
   },
   methods: {
-    ...mapActions(['fetchMeetup']),
+    ...mapActions('meetups', ['fetchMeetup']),
+    ...mapActions('threads', ['fetchThreads']),
   },
 };
 </script>

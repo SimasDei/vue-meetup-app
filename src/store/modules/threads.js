@@ -8,7 +8,7 @@ export default {
   },
   mutations: {
     FETCH_THREADS(state, threads) {
-      state.threads = threads;
+      state.items = threads;
     },
     CLEAR_ITEMS(state, itemType) {
       if (itemType === 'meetup') {
@@ -19,7 +19,7 @@ export default {
   },
   actions: {
     fetchThreads({ commit }, meetupId) {
-      commit('CLEAR_ITEMS', 'threads');
+      commit('CLEAR_ITEMS', 'items');
       axios
         .get(`/api/v1/threads?meetupId=${meetupId}`)
         .then(res => {
@@ -29,5 +29,9 @@ export default {
         .catch(error => console.log(error));
     },
   },
-  getters: {},
+  getters: {
+    threads(state) {
+      return state.items;
+    },
+  },
 };

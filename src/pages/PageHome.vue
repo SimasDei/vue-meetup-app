@@ -44,10 +44,12 @@ export default {
     this.fetchCategories();
   },
   computed: {
-    ...mapGetters(['meetups', 'categories']),
+    ...mapGetters('meetups', ['meetups']),
+    ...mapGetters('categories', ['categories']),
   },
   methods: {
-    ...mapActions(['fetchMeetups', 'fetchCategories']),
+    ...mapActions('meetups', ['fetchMeetups']),
+    ...mapActions('categories', ['fetchCategories']),
   },
 };
 </script>

@@ -9,10 +9,10 @@ export default {
   },
   mutations: {
     FETCH_MEETUPS(state, meetups) {
-      state.meetups = meetups;
+      state.items = meetups;
     },
     FETCH_MEETUP(state, meetup) {
-      state.meetup = meetup;
+      state.item = meetup;
     },
     CLEAR_ITEMS(state, itemType) {
       if (itemType === 'item') {
@@ -23,7 +23,7 @@ export default {
   },
   actions: {
     fetchMeetups({ commit }) {
-      commit('CLEAR_ITEMS', 'meetups');
+      commit('CLEAR_ITEMS', 'items');
       axios
         .get('/api/v1/meetups')
         .then(res => {
@@ -33,8 +33,7 @@ export default {
         .catch(error => console.log(error));
     },
     fetchMeetup({ commit }, meetupId) {
-      commit('CLEAR_ITEMS', 'meetup');
-      commit('CLEAR_ITEMS', 'threads');
+      commit('CLEAR_ITEMS', 'item');
       axios
         .get(`/api/v1/meetups/${meetupId}`)
         .then(res => {
@@ -42,15 +41,14 @@ export default {
           commit('FETCH_MEETUP', meetup);
         })
         .catch(error => console.log(error));
-
-      axios
-        .get(`/api/v1/threads?meetupId=${meetupId}`)
-        .then(res => {
-          const threads = res.data;
-          commit('FETCH_THREADS', threads);
-        })
-        .catch(error => console.log(error));
     },
   },
-  getters: {},
+  getters: {
+    meetups(state) {
+      return state.items;
+    },
+    meetup(state) {
+      return state.item;
+    },
+  },
 };
