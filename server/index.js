@@ -3,6 +3,17 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config/dev');
 
+const session = require('express-session');
+const passport = require('passport');
+const MongoDbStore = require('connect-mongodb-session')(session);
+
+const store = new MongoDbStore({
+  uri: config.DB_URI,
+  collection: 'Sessions',
+});
+
+store.on('error', error => console.log(error));
+
 require('./models/meetups');
 require('./models/users');
 require('./models/threads');
@@ -23,6 +34,17 @@ mongoose
 const app = express();
 
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: config.sessionSecret,
+    cookie: { maxAge: 1000 * 60 * 60 },
+    resave: false,
+    saveUninitialized: false,
+    store,
+  }),
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);
