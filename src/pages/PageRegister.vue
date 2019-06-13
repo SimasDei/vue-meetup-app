@@ -65,6 +65,9 @@
                     autocomplete
                     v-model="form.avatar"
                   >
+                  <div class="form-error" v-if="$v.form.email.$error">
+                    <span class="help is-danger" v-if="!$v.form.avatar.url">Invalid URL format</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
@@ -78,26 +81,44 @@
                     v-model="form.password"
                   >
                   <div class="form-error" v-if="$v.form.password.$error">
-                    <span class="help is-danger">Password is Required</span>
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.password.required"
+                    >Password is Required</span>
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.password.minLength"
+                    >Password must be at least 6 characters long</span>
                   </div>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
                   <input
-                    @blur="$v.form.password.$touch()"
+                    @blur="$v.form.password2.$touch()"
                     class="input is-large"
                     type="password"
                     placeholder="Password Confirmation"
                     autocomplete="off"
                     v-model="form.password2"
                   >
-                  <div class="form-error" v-if="$v.form.password.$error">
-                    <span class="help is-danger">Password is Required</span>
+                  <div class="form-error" v-if="$v.form.password2.$error">
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.password2.required"
+                    >Password Confirmation is Required</span>
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.password2.sameAs"
+                    >Passwords must match</span>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="button is-block is-info is-large is-fullwidth">Register</button>
+              <button
+                type="submit"
+                class="button is-block is-info is-large is-fullwidth"
+                :disabled="isValid"
+              >Register</button>
             </form>
           </div>
           <p class="has-text-grey">
@@ -113,7 +134,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { required, email } from 'vuelidate/lib/validators';
+import {
+  required,
+  email,
+  minLength,
+  url,
+  sameAs,
+} from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -141,16 +168,24 @@ export default {
         required,
         email,
       },
+      avatar: {
+        url,
+      },
       password: {
         required,
+        minLength: minLength(6),
       },
       password2: {
         required,
+        sameAs: sameAs('password'),
       },
     },
   },
   computed: {
     ...mapGetters('auth', ['user']),
+    isValid() {
+      return this.$v.form.$invalid;
+    },
   },
   methods: {
     ...mapActions('auth', ['register']),
