@@ -67,6 +67,10 @@
                   >
                   <div class="form-error" v-if="$v.form.email.$error">
                     <span class="help is-danger" v-if="!$v.form.avatar.url">Invalid URL format</span>
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.avatar.supportedFileType"
+                    >Invalid file type</span>
                   </div>
                 </div>
               </div>
@@ -142,6 +146,8 @@ import {
   sameAs,
 } from 'vuelidate/lib/validators';
 
+import { supportedFileType } from '@/helpers/validators';
+
 export default {
   data() {
     return {
@@ -170,6 +176,7 @@ export default {
       },
       avatar: {
         url,
+        supportedFileType,
       },
       password: {
         required,
