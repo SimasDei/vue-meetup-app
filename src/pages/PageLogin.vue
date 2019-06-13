@@ -19,6 +19,7 @@
                     autofocus
                     autocomplete="email"
                     v-model="form.email"
+                    @blur="$v.form.email.$touch()"
                   >
                   <div class="form-error" v-if="$v.form.email.$error">
                     <span class="help is-danger" v-if="!$v.form.email.required">Email is Required</span>
@@ -34,13 +35,17 @@
                     placeholder="Your Password"
                     autocomplete="current-password"
                     v-model="form.password"
+                    @blur="$v.form.password.$touch()"
                   >
                   <div class="form-error" v-if="$v.form.password.$error">
                     <span class="help is-danger">Password is Required</span>
                   </div>
                 </div>
               </div>
-              <button class="button is-block is-info is-large is-fullwidth">Login</button>
+              <button
+                class="button is-block is-info is-large is-fullwidth"
+                :disabled="isValid"
+              >Login</button>
             </form>
           </div>
           <p class="has-text-grey">
@@ -65,6 +70,7 @@ export default {
         email: null,
         password: null,
       },
+      valid: false,
     };
   },
   validations: {
@@ -80,13 +86,14 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['user']),
+    isValid() {
+      return this.$v.form.$invalid;
+    },
   },
   methods: {
     ...mapActions('auth', ['login']),
     onSubmit(e) {
       e.preventDefault();
-      this.$v.form.$touch();
-
       if (!this.$v.form.email.$error && !this.$v.form.password.$error) {
         this.login(this.form);
       }

@@ -13,26 +13,47 @@
               <div class="field">
                 <div class="control">
                   <input
+                    @blur="$v.form.username.$touch()"
                     class="input is-large"
                     type="text"
                     placeholder="Username"
                     v-model="form.username"
                   >
-                </div>
-              </div>
-              <div class="field">
-                <div class="control">
-                  <input class="input is-large" type="text" placeholder="Name" v-model="form.name">
+                  <div class="form-error" v-if="$v.form.username.$error">
+                    <span
+                      class="help is-danger"
+                      v-if="!$v.form.username.required"
+                    >Username is Required</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
                   <input
+                    @blur="$v.form.name.$touch()"
+                    class="input is-large"
+                    type="text"
+                    placeholder="Name"
+                    v-model="form.name"
+                  >
+                  <div class="form-error" v-if="$v.form.name.$error">
+                    <span class="help is-danger" v-if="!$v.form.name.required">Name is Required</span>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  <input
+                    @blur="$v.form.email.$touch()"
                     class="input is-large"
                     type="email"
                     placeholder="Your Email"
                     v-model="form.email"
                   >
+                  <div class="form-error" v-if="$v.form.email.$error">
+                    <span class="help is-danger" v-if="!$v.form.email.required">Email is Required</span>
+                    <span class="help is-danger" v-if="!$v.form.email.email">Invalid email address</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
@@ -49,23 +70,31 @@
               <div class="field">
                 <div class="control">
                   <input
+                    @blur="$v.form.password.$touch()"
                     class="input is-large"
                     type="password"
                     placeholder="Your Password"
                     autocomplete="new-password"
                     v-model="form.password"
                   >
+                  <div class="form-error" v-if="$v.form.password.$error">
+                    <span class="help is-danger">Password is Required</span>
+                  </div>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
                   <input
+                    @blur="$v.form.password.$touch()"
                     class="input is-large"
                     type="password"
                     placeholder="Password Confirmation"
                     autocomplete="off"
                     v-model="form.password2"
                   >
+                  <div class="form-error" v-if="$v.form.password.$error">
+                    <span class="help is-danger">Password is Required</span>
+                  </div>
                 </div>
               </div>
               <button type="submit" class="button is-block is-info is-large is-fullwidth">Register</button>
@@ -84,6 +113,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { required, email } from 'vuelidate/lib/validators';
 
 export default {
   data() {
@@ -96,7 +126,28 @@ export default {
         password: null,
         password2: null,
       },
+      valid: false,
     };
+  },
+  validations: {
+    form: {
+      username: {
+        required,
+      },
+      name: {
+        required,
+      },
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+      password2: {
+        required,
+      },
+    },
   },
   computed: {
     ...mapGetters('auth', ['user']),
