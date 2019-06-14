@@ -44,7 +44,7 @@ exports.register = function(req, res) {
   });
 };
 
-exports.login = function(req, res) {
+exports.login = function(req, res, next) {
   const { email, password } = req.body;
   if (!email) {
     return res.status(422).json({
@@ -61,6 +61,18 @@ exports.login = function(req, res) {
     });
   }
   return passport.authenticate('local', (err, passportUser) => {
-    return res.json({ email, password, msg: 'it works !' });
-  });
+    if (err) return next(err);
+    if (passportUser) {
+      req.login(passportUser, err => {
+        if (err) return next(err);
+        return res.json(passportUser);
+      });
+    } else {
+      return res.status(422).send({
+        errors: {
+          authentication: 'The server has exploded',
+        },
+      });
+    }
+  })(req, res, next);
 };
