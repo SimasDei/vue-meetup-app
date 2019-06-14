@@ -198,7 +198,9 @@ export default {
     ...mapActions('auth', ['register']),
     onSubmit(e) {
       e.preventDefault();
-      this.register(this.form);
+      this.register(this.form)
+        .then(() => this.$router.push('/login'))
+        .catch(error => console.log(error));
     },
   },
 };

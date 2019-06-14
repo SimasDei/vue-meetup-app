@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 
 export default {
   namespaced: true,
@@ -12,18 +12,22 @@ export default {
     },
   },
   actions: {
-    register({ commit }, payload) {
-      commit('SET_USER', payload);
-      console.log(payload);
+    register(payload) {
+      return axios.post('/api/v1/users/register', payload);
     },
     login({ commit }, payload) {
-      commit('SET_USER', payload);
-      console.log(payload);
+      return axios.post('/api/v1/users/login', payload).then(res => {
+        const user = res.data;
+        commit('SET_USER', user);
+      });
     },
   },
   getters: {
     user(state) {
-      return state.user;
+      return state.user || null;
+    },
+    isAuthenticated(state) {
+      return !!state.user;
     },
   },
 };

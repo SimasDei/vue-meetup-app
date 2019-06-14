@@ -94,9 +94,9 @@ export default {
     ...mapActions('auth', ['login']),
     onSubmit(e) {
       e.preventDefault();
-      if (!this.$v.form.email.$error && !this.$v.form.password.$error) {
-        this.login(this.form);
-      }
+      this.login(this.form)
+        .then(() => this.$router.push('/'))
+        .catch(error => console.log(error));
     },
   },
 };
