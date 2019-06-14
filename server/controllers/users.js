@@ -14,7 +14,13 @@ exports.getUsers = function(req, res) {
 exports.getCurrentUser = function(req, res) {
   const user = req.user;
   if (!user) return res.sendStatus(422);
-  return res.json(user);
+
+  /**
+   * @auth - Alternative for session based authentication
+   * 
+    return res.json(user);
+   */
+  return res.json(user.toAuthJSON());
 };
 
 exports.register = function(req, res) {
@@ -69,10 +75,16 @@ exports.login = function(req, res, next) {
   return passport.authenticate('local', (err, passportUser) => {
     if (err) return next(err);
     if (passportUser) {
-      req.login(passportUser, err => {
+      /**
+       * @auth - Alternative for session based authentication
+       * 
+        req.login(passportUser, err => {
         if (err) return next(err);
         return res.json(passportUser);
       });
+       */
+
+      return res.json(passportUser.toAuthJSON());
     } else {
       return res.status(422).send({
         errors: {

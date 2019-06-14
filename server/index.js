@@ -3,16 +3,18 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./config/dev');
 
-const session = require('express-session');
+/**
+ * @auth - Alternative for session based authentication
+ * 
 const passport = require('passport');
+const session = require('express-session');
 const MongoDbStore = require('connect-mongodb-session')(session);
-
 const store = new MongoDbStore({
   uri: config.DB_URI,
   collection: 'Sessions',
 });
-
 store.on('error', error => console.log(error));
+ */
 
 require('./models/meetups');
 require('./models/users');
@@ -36,6 +38,10 @@ mongoose
 const app = express();
 
 app.use(bodyParser.json());
+
+/**
+ *  @auth - Alternative for session based authentication
+ * 
 app.use(
   session({
     secret: config.sessionSecret,
@@ -47,6 +53,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+ */
 
 app.use('/api/v1/meetups', meetupsRoutes);
 app.use('/api/v1/users', usersRoutes);

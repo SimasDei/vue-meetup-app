@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 // const Meetup = require('./meetups');
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// const config = require('../config/dev');
+const config = require('../config/dev');
 
 const userSchema = new Schema({
   avatar: String,
@@ -56,6 +56,30 @@ userSchema.methods.comparePassword = function(candidatePassword, callback) {
 
     callback(null, isMatch);
   });
+};
+
+userSchema.methods.generateJWT = function() {
+  return jwt.sign(
+    {
+      email: this.email,
+      id: this._id,
+    },
+    config.JWT_SECRET,
+    { expiresIn: '1h' },
+  );
+};
+
+userSchema.methods.toAuthJSON = function() {
+  return {
+    _id: this._id,
+    username: this.username,
+    name: this.name,
+    email: this.email,
+    avatar: this.avatar,
+    info: this.info,
+    joinedMeetups: this.joinedMeetups,
+    token: this.generateJWT(),
+  };
 };
 
 module.exports = mongoose.model('User', userSchema);
