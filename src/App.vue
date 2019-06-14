@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import TheNavbar from '@/components/shared/TheNavbar';
 import TheFooter from '@/components/shared/TheFooter';
 export default {
@@ -16,6 +18,12 @@ export default {
   components: {
     TheNavbar,
     TheFooter,
+  },
+  async created() {
+    await this.getAuthUser();
+  },
+  methods: {
+    ...mapActions('auth', ['getAuthUser']),
   },
 };
 </script>

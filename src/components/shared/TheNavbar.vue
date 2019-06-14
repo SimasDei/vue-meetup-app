@@ -17,7 +17,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navbarBasicExample" class="navbar-menu is-active">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
 
@@ -38,11 +38,22 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
+          <div v-if="user">Welcome {{user.username}}</div>
+        </div>
+        <div v-if="user" class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Account</a>
+          <div class="navbar-dropdown">
+            <router-link to="/profile" class="navbar-item">Profile</router-link>
+            <hr class="navbar-divider">
+            <a class="navbar-item" @click="onLogout">Logout</a>
+          </div>
+        </div>
+        <div v-else class="navbar-item has-dropdown">
           <div class="buttons">
-            <router-link class="button is-primary" to="/register">
+            <router-link to="/register" class="button is-primary">
               <strong>Sign up</strong>
             </router-link>
-            <router-link class="button is-light" to="/login">Log in</router-link>
+            <router-link to="/login" class="button is-light">Log in</router-link>
           </div>
         </div>
       </div>
@@ -51,12 +62,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'TheNavbar',
   computed: {
     ...mapGetters('auth', ['user', 'isAuthenticated']),
+  },
+  methods: {
+    ...mapActions('auth', ['logout']),
+    onLogout() {
+      this.logout()
+        .then(() => this.$router.history.push('/login'))
+        .catch(error => console.log(error));
+    },
   },
 };
 </script>
