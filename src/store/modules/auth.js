@@ -5,44 +5,54 @@ export default {
 
   state: {
     user: null,
+    isAuthResolved: false,
   },
   mutations: {
     SET_USER(state, user) {
       state.user = user;
     },
+    SET_AUTH_STATE(state, value) {
+      state.isAuthResolved = value;
+    },
   },
   actions: {
-    register(payload) {
-      return axios.post('/api/v1/users/register', payload);
+    async register(payload) {
+      try {
+        return axios.post('/api/v1/users/register', payload);
+      } catch (error) {
+        console.log(error);
+        return error;
+      }
     },
-    login({ commit }, payload) {
-      return axios.post('/api/v1/users/login', payload).then(res => {
+    async login({ commit }, payload) {
+      const res = await axios.post('/api/v1/users/login', payload);
+      const user = res.data;
+      commit('SET_USER', user);
+    },
+    async getAuthUser({ commit, getters }) {
+      const user = getters['user'];
+      if (user) return Promise.resolve(user);
+      try {
+        const res = await axios.get('/api/v1/users/me');
         const user = res.data;
         commit('SET_USER', user);
-      });
+        commit('SET_AUTH_STATE', true);
+        return user;
+      } catch (error) {
+        commit('SET_USER', null);
+        commit('SET_AUTH_STATE', true);
+        console.log(error);
+        return error;
+      }
     },
-    getAuthUser({ commit }) {
-      return axios
-        .get('/api/v1/users/me')
-        .then(res => {
-          const user = res.data;
-          commit('SET_USER', user);
-          return user;
-        })
-        .catch(error => {
-          commit('SET_USER', null);
-          console.log(error);
-          return undefined;
-        });
-    },
-    logout({ commit }) {
-      return axios
-        .post('/api/v1/users/logout')
-        .then(() => commit('SET_USER', null))
-        .catch(error => {
-          console.log(error);
-          return undefined;
-        });
+    async logout({ commit }) {
+      try {
+        await axios.post('/api/v1/users/logout');
+        return commit('SET_USER', null);
+      } catch (error) {
+        console.log(error);
+        return error;
+      }
     },
   },
   getters: {
@@ -51,6 +61,9 @@ export default {
     },
     isAuthenticated(state) {
       return !!state.user;
+    },
+    isAuthResolved(state) {
+      return state.isAuthResolved;
     },
   },
 };

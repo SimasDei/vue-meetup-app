@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="isAuthResolved">
     <TheNavbar/>
     <main class="page-wrapper">
       <router-view></router-view>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 import TheNavbar from '@/components/shared/TheNavbar';
 import TheFooter from '@/components/shared/TheFooter';
@@ -19,8 +19,8 @@ export default {
     TheNavbar,
     TheFooter,
   },
-  async created() {
-    await this.getAuthUser();
+  computed: {
+    ...mapGetters('auth', ['isAuthResolved']),
   },
   methods: {
     ...mapActions('auth', ['getAuthUser']),
