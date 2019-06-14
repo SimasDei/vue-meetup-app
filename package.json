@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "server": "cd server/ && nodemon index.js",
+    "dev": "concurrently \"npm run server\" \"npm run serve\""
   },
   "dependencies": {
     "algoliasearch": "^3.32.0",
