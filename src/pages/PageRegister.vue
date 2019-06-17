@@ -200,7 +200,12 @@ export default {
       e.preventDefault();
       this.register(this.form)
         .then(() => this.$router.push('/login'))
-        .catch(error => console.log(error));
+        .catch(error => {
+          this.$toasted.error('User already exists', {
+            duration: 5000,
+          });
+          console.log({ ...error });
+        });
     },
   },
 };

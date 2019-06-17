@@ -94,9 +94,15 @@ export default {
     ...mapActions('auth', ['login']),
     onSubmit(e) {
       e.preventDefault();
+      this.$v.form.$touch();
       this.login(this.form)
-        .then(() => this.$router.push('/'))
-        .catch(error => console.log(error));
+        .then()
+        .catch(error => {
+          this.$toasted.error(error, {
+            duration: 5000,
+          });
+          console.log(error);
+        });
     },
   },
 };
