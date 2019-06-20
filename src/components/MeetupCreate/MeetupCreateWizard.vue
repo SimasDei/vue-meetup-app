@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import MeetupLocation from './MeetupLocation';
-import MeetupDetail from './MeetupDetail';
-import MeetupDescription from './MeetupDescription';
-import MeetupConfirmation from './MeetupConfirmation';
+import MeetupLocation from './MeetupLocation.vue';
+import MeetupDetail from './MeetupDetail.vue';
+import MeetupDescription from './MeetupDescription.vue';
+import MeetupConfirmation from './MeetupConfirmation.vue';
 export default {
   components: {
     MeetupLocation,
