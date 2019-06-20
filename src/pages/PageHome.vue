@@ -6,7 +6,12 @@
         <div class="m-b-lg">
           <h1 class="title is-inline">Featured Meetups in "Location"</h1>
           <AppDropdown/>
-          <button class="button is-primary is-pulled-right m-r-sm">Create Meetups</button>
+          <router-link
+            tag="button"
+            to="/meetups/new"
+            class="button is-primary is-pulled-right m-r-sm"
+            v-if="user"
+          >Create Meetups</router-link>
           <button class="button is-primary is-pulled-right m-r-sm">All</button>
         </div>
         <div class="row columns is-multiline">
@@ -54,6 +59,7 @@ export default {
   computed: {
     ...mapGetters('meetups', ['meetups']),
     ...mapGetters('categories', ['categories']),
+    ...mapGetters('auth', ['user']),
   },
   methods: {
     ...mapActions('meetups', ['fetchMeetups']),

@@ -1,19 +1,21 @@
 <template>
   <div class="meetup-create-form">
-    <div class="current-step is-pulled-right">1 of 4</div>
+    <div class="current-step is-pulled-right">{{currentStep}} of 4</div>
     <!-- Form Steps -->
-    <MeetupLocation/>
-    <MeetupDetail/>
-    <MeetupDescription/>
-    <MeetupConfirmation/>
+    <MeetupLocation v-if="currentStep === 1"/>
+    <MeetupDetail v-if="currentStep === 2"/>
+    <MeetupDescription v-if="currentStep === 3"/>
+    <MeetupConfirmation v-if="currentStep === 4"/>
 
-    <progress class="progress" :value="100" max="100">100%</progress>
+    <progress class="progress" :value="currentProgress" max="100">{{currentProgress}}</progress>
     <div class="controll-btns m-b-md">
-      <button class="button is-primary m-r-sm">Back</button>
-      <button class="button is-primary">Next</button>
-      <!-- Confirm Data -->
-      <!-- <button v-else
-      class="button is-primary">Confirm</button>-->
+      <button class="button is-primary m-r-sm" @click="moveToPrevStep" v-if="currentStep !== 1">Back</button>
+      <button
+        class="button is-primary"
+        @click="moveToNextStep"
+        v-if="currentStep !== allStepsCount"
+      >Next</button>
+      <button v-else class="button is-primary">Confirm</button>
     </div>
     <!-- Just To See Data in the Form -->
     <pre><code>{{form}}</code></pre>
@@ -34,6 +36,8 @@ export default {
   },
   data() {
     return {
+      currentStep: 1,
+      allStepsCount: 4,
       form: {
         location: null,
         title: null,
@@ -46,6 +50,21 @@ export default {
         timeFrom: null,
       },
     };
+  },
+  computed: {
+    currentProgress() {
+      return (100 / this.allStepsCount) * this.currentStep;
+    },
+  },
+  methods: {
+    moveToNextStep() {
+      if (this.currentStep >= this.allStepsCount) return;
+      this.currentStep++;
+    },
+    moveToPrevStep() {
+      if (this.currentStep === 1) return;
+      this.currentStep--;
+    },
   },
 };
 </script>

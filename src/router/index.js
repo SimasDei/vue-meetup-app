@@ -4,6 +4,7 @@ import store from '@/store/';
 
 import PageHome from '@/pages/PageHome.vue';
 import PageMeetupDetail from '@/pages/PageMeetupDetail.vue';
+import PageMeetupCreate from '@/pages/PageMeetupCreate.vue';
 import PageSecret from '@/pages/PageSecret.vue';
 import PageMeetupFind from '@/pages/PageMeetupFind.vue';
 import PageLogin from '@/pages/PageLogin.vue';
@@ -19,6 +20,12 @@ const router = new Router({
       path: '/',
       name: 'PageHome',
       component: PageHome,
+    },
+    {
+      path: '/meetups/new',
+      name: 'PageMeetupCreate',
+      component: PageMeetupCreate,
+      meta: { onlyAuthUser: true },
     },
     {
       path: '/meetups/secret',
