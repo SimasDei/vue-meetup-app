@@ -14,37 +14,38 @@
       </div>
     </div>
     <div class="field">
-      <label class="title m-b-sm">Starts At</label>
-      <input
+      <label class="title m-b-sm">Start Date</label>
+      <vue-datepicker
+        :input-class="'input'"
         v-model="form.startDate"
-        class="input"
-        type="text"
         placeholder="Starts At"
         @blur="$v.form.startDate.$touch()"
-      >
+        @input="setDate"
+        :disabledDates="disabledDates"
+      ></vue-datepicker>
       <div v-if="$v.form.startDate.$error">
         <span v-if="!$v.form.startDate.required" class="help is-danger">Starts at is required</span>
       </div>
     </div>
     <div class="field">
       <label class="title m-b-sm">From</label>
-      <input
-        v-model="form.timeFrom"
-        class="input"
+      <vue-timepicker
         type="text"
         placeholder="Time From"
         @blur="$v.form.timeFrom.$touch()"
-      >
+        @change="changeTime($event,'timeFrom')"
+        :minute-interval="10"
+      />
     </div>
     <div class="field">
       <label class="title m-b-sm">To</label>
-      <input
-        v-model="form.timeTo"
-        class="input"
+      <vue-timepicker
         type="text"
         placeholder="Time to"
         @blur="$v.form.timeTo.$touch()"
-      >
+        @change="changeTime($event,'timeTo')"
+        :minute-interval="10"
+      />
     </div>
     <div class="field">
       <label class="title m-b-sm">Please Choose the Category.</label>
@@ -70,17 +71,36 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
 import { mapGetters } from 'vuex';
+import VueDatepicker from 'vuejs-datepicker';
+import VueTimepicker from 'vue2-timepicker';
+import moment from 'moment';
+
 export default {
+  name: 'MeetupDetail',
+  components: {
+    VueDatepicker,
+    VueTimepicker,
+  },
   data() {
     return {
+      disabledDates: {
+        customPredictor(date) {
+          const today = new Date();
+          const yesterday = today.setDate(today.getDate() - 1);
+          return date < yesterday;
+        },
+      },
       form: {
         title: null,
-        startDate: null,
+        startDate: new Date(),
         timeTo: null,
         timeFrom: null,
         category: null,
       },
     };
+  },
+  created() {
+    this.emitFormData();
   },
   validations: {
     form: {
@@ -100,6 +120,16 @@ export default {
         data: this.form,
         isValid: !this.$v.$invalid,
       });
+    },
+    setDate(date) {
+      this.form.startDate = moment(date).format();
+      this.emitFormData();
+    },
+    changeTime({ data }, field) {
+      const hours = data.HH || '00';
+      const minutes = data.mm || '00';
+      this.form[field] = `${hours}:${minutes}`;
+      this.emitFormData();
     },
   },
 };

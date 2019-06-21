@@ -3,14 +3,12 @@
     <div class="current-step is-pulled-right">{{currentStep}} of 4</div>
     <!-- Form Steps -->
     <keep-alive>
-      <MeetupLocation v-if="currentStep === 1" @stepUpdated="mergeStepData" ref="currentComponent"/>
-      <MeetupDetail v-if="currentStep === 2" @stepUpdated="mergeStepData" ref="currentComponent"/>
-      <MeetupDescription
-        v-if="currentStep === 3"
+      <component
+        :is="formSteps[currentStep -1]"
         @stepUpdated="mergeStepData"
         ref="currentComponent"
+        :form="form"
       />
-      <MeetupConfirmation v-if="currentStep === 4" :form="form" ref="currentComponent"/>
     </keep-alive>
     <progress class="progress" :value="currentProgress" max="100">{{currentProgress}}</progress>
     <div class="controll-btns m-b-md">
@@ -43,8 +41,13 @@ export default {
   data() {
     return {
       currentStep: 1,
-      allStepsCount: 4,
       canProceed: false,
+      formSteps: [
+        'MeetupLocation',
+        'MeetupDetail',
+        'MeetupDescription',
+        'MeetupConfirmation',
+      ],
       form: {
         location: null,
         title: null,
@@ -61,6 +64,9 @@ export default {
   computed: {
     currentProgress() {
       return (100 / this.allStepsCount) * this.currentStep;
+    },
+    allStepsCount() {
+      return this.formSteps.length;
     },
   },
   methods: {
