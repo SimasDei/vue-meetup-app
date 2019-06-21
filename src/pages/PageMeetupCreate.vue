@@ -1,25 +1,37 @@
 <template>
   <div class="meetup-create-page">
-    <AppHero />
+    <AppHero/>
     <section class="section">
       <div class="container">
-        <MeetupCreateWizard />
+        <MeetupCreateWizard/>
       </div>
     </section>
   </div>
 </template>
 
 <script>
-  import MeetupCreateWizard from '@/components/MeetupCreate/MeetupCreateWizard'
-  export default {
-    components: {
-      MeetupCreateWizard
-    }
-  }
+import { mapActions, mapGetters } from 'vuex';
+import MeetupCreateWizard from '@/components/MeetupCreate/MeetupCreateWizard';
+export default {
+  components: {
+    MeetupCreateWizard,
+  },
+  created() {
+    if (this.categories.length) {
+      return;
+    } else this.fetchCategories();
+  },
+  computed: {
+    ...mapGetters('categories', ['categories']),
+  },
+  methods: {
+    ...mapActions('categories', ['fetchCategories']),
+  },
+};
 </script>
 
 <style scoped lang="scss">
-  .meetup-create-page {
-    min-height: 100vh;
-  }
+.meetup-create-page {
+  min-height: 100vh;
+}
 </style>
