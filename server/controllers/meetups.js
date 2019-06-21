@@ -30,3 +30,20 @@ exports.getMeetupById = function(req, res) {
       return res.json(meetup);
     });
 };
+
+exports.createMeetup = function(req, res) {
+  const meetupData = req.body;
+  const user = req.user;
+
+  const meetup = new Meetup(meetupData);
+  meetup.user = user;
+  meetup.status = 'active';
+
+  meetup.save((error, createdMeetup) => {
+    if (error) {
+      return res.status(422).send({ error });
+    }
+
+    return res.json(createdMeetup);
+  });
+};

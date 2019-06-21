@@ -19,14 +19,14 @@
         v-if="currentStep !== allStepsCount"
         :disabled="!canProceed"
       >Next</button>
-      <button v-else class="button is-primary">Confirm</button>
+      <button v-else class="button is-primary" @click="submitData">Confirm</button>
     </div>
-    <!-- Just To See Data in the Form -->
-    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import MeetupLocation from './MeetupLocation.vue';
 import MeetupDetail from './MeetupDetail.vue';
 import MeetupDescription from './MeetupDescription.vue';
@@ -70,6 +70,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('meetups', ['createMeetup']),
     mergeStepData(stepData) {
       this.form = {
         ...this.form,
@@ -90,6 +91,11 @@ export default {
       if (this.currentStep === 1) return;
       this.currentStep--;
       this.canProceed = true;
+    },
+    submitData() {
+      this.createMeetup(this.form)
+        .then(meetup => this.$router.push(`/meetups/${meetup._id}`))
+        .catch(err => console.log(err));
     },
   },
 };

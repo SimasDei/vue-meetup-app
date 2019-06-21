@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosInstance from '../../services/axios';
 
 export default {
   namespaced: true,
@@ -41,6 +42,17 @@ export default {
           commit('FETCH_MEETUP', meetup);
         })
         .catch(error => console.log(error));
+    },
+    createMeetup({ rootState }, meetup) {
+      meetup.meetupCreator = rootState.auth.user;
+      meetup.processedLocation = meetup.location
+        .toLowerCase()
+        .replace(/[\s,]+/g, '')
+        .trim();
+      return axiosInstance
+        .post('/api/v1/meetups', meetup)
+        .then(res => res.data)
+        .catch(err => console.log(err));
     },
   },
   getters: {

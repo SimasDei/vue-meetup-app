@@ -1,7 +1,7 @@
   <template>
   <div class="meetup-detail-page" v-if="pageLoader_dataLoaded">
     <section class="hero">
-      <div class="hero-body">
+      <div class="hero-body" :style="{'background-image': backgroundImage}">
         <div class="container">
           <h2 class="subtitle">{{meetup.startDate | formatDate}}</h2>
           <h1 class="title">{{meetup.title}}</h1>
@@ -168,6 +168,14 @@ export default {
     meetupCreator() {
       return this.meetup.meetupCreator;
     },
+    backgroundImage() {
+      return (
+        `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${
+          this.meetup.image
+        }` ||
+        'linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(https://images.unsplash.com/photo-1560153058-c0b578291652?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto'
+      );
+    },
   },
   methods: {
     ...mapActions('meetups', ['fetchMeetup']),
@@ -202,6 +210,7 @@ export default {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position-y: 34%;
+    padding: 10rem 1.5rem;
     > p,
     h1,
     h2,
