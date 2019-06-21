@@ -5,39 +5,39 @@
     <div class="content">
       <div>
         <span class="result-title">Location</span>
-        <p>Some Location</p>
+        <p>{{form.location || 'location'}}</p>
       </div>
       <div>
         <span class="result-title">Title</span>
-        <p>Some Title</p>
+        <p>{{form.title || 'title'}}</p>
       </div>
       <div>
         <span class="result-title">Start Date</span>
-        <p>Some Start Date</p>
+        <p>{{form.startDate || 'Start Date'}}</p>
       </div>
       <div>
         <span class="result-title">From</span>
-        <p>Some Time From</p>
+        <p>{{form.timeFrom || 'From'}}</p>
       </div>
       <div>
         <span class="result-title">To</span>
-        <p>Some Time To</p>
+        <p>{{form.timeTo || 'To'}}</p>
       </div>
       <div>
         <span class="result-title">Category</span>
-        <p>Some Category</p>
+        <p>{{form.category.name || 'Category'}}</p>
       </div>
       <div>
         <span class="result-title">Image</span>
-        <p>Some Event</p>
+        <p>{{form.image || 'image'}}</p>
       </div>
       <div>
         <span class="result-title">Short Info</span>
-        <p>Some Info</p>
+        <p>{{form.shortInfo || 'Short Info'}}</p>
       </div>
       <div>
         <span class="result-title">Description</span>
-        <p>Some Description</p>
+        <p>{{form.description || 'Description'}}</p>
       </div>
     </div>
   </div>
@@ -45,6 +45,8 @@
 
 <script>
 export default {
+  name: 'MeetupConfirmation',
+  props: ['form'],
   validations: {},
 };
 </script>

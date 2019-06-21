@@ -4,7 +4,13 @@
     <div class="m-b-lg">
       <span class="subtitle">New York, US</span>
       <a>(change location)</a>
-      <input v-model="form.location" type="text" class="input">
+      <input
+        v-model="form.location"
+        type="text"
+        class="input"
+        @input="emitFormData"
+        @blur="$v.form.location.$touch()"
+      >
       <div v-if="$v.form.location.$error">
         <span v-if="!$v.form.location.required" class="help is-danger">Location is required</span>
       </div>
@@ -24,11 +30,22 @@ export default {
   },
   validations: {
     form: {
-      location: required,
+      location: { required },
+    },
+  },
+  methods: {
+    emitFormData() {
+      this.$emit('stepUpdated', {
+        data: this.form,
+        isValid: !this.$v.$invalid,
+      });
     },
   },
 };
 </script>
 
 <style scoped>
+.m-b-lg a {
+  margin-left: 0.6rem;
+}
 </style>

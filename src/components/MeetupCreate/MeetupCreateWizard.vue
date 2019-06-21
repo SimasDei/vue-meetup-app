@@ -2,11 +2,16 @@
   <div class="meetup-create-form">
     <div class="current-step is-pulled-right">{{currentStep}} of 4</div>
     <!-- Form Steps -->
-    <MeetupLocation v-if="currentStep === 1"/>
-    <MeetupDetail v-if="currentStep === 2"/>
-    <MeetupDescription v-if="currentStep === 3"/>
-    <MeetupConfirmation v-if="currentStep === 4"/>
-
+    <keep-alive>
+      <MeetupLocation v-if="currentStep === 1" @stepUpdated="mergeStepData" ref="currentComponent"/>
+      <MeetupDetail v-if="currentStep === 2" @stepUpdated="mergeStepData" ref="currentComponent"/>
+      <MeetupDescription
+        v-if="currentStep === 3"
+        @stepUpdated="mergeStepData"
+        ref="currentComponent"
+      />
+      <MeetupConfirmation v-if="currentStep === 4" :form="form" ref="currentComponent"/>
+    </keep-alive>
     <progress class="progress" :value="currentProgress" max="100">{{currentProgress}}</progress>
     <div class="controll-btns m-b-md">
       <button class="button is-primary m-r-sm" @click="moveToPrevStep" v-if="currentStep !== 1">Back</button>
@@ -14,6 +19,7 @@
         class="button is-primary"
         @click="moveToNextStep"
         v-if="currentStep !== allStepsCount"
+        :disabled="!canProceed"
       >Next</button>
       <button v-else class="button is-primary">Confirm</button>
     </div>
@@ -38,6 +44,7 @@ export default {
     return {
       currentStep: 1,
       allStepsCount: 4,
+      canProceed: false,
       form: {
         location: null,
         title: null,
@@ -57,13 +64,26 @@ export default {
     },
   },
   methods: {
+    mergeStepData(stepData) {
+      this.form = {
+        ...this.form,
+        ...stepData.data,
+      };
+      this.canProceed = stepData.isValid;
+    },
     moveToNextStep() {
       if (this.currentStep >= this.allStepsCount) return;
       this.currentStep++;
+      if (this.$refs && this.$refs['currentComponent']) {
+        this.$nextTick(
+          () => (this.canProceed = this.$refs['currentComponent'].$v.invalid),
+        );
+      }
     },
     moveToPrevStep() {
       if (this.currentStep === 1) return;
       this.currentStep--;
+      this.canProceed = true;
     },
   },
 };
