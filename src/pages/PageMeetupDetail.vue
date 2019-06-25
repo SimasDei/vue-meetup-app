@@ -22,8 +22,7 @@
           </article>
         </div>
         <div class="is-pulled-right">
-          <!-- We will handle this later (: -->
-          <button class="button is-danger">Leave Group</button>
+          <button class="button is-danger" v-if="isMember">Leave Meetup</button>
         </div>
       </div>
     </section>
@@ -87,11 +86,12 @@
             <div class="content is-medium">
               <h3 class="title is-3">About the Meetup</h3>
               <p>{{meetup.description}}</p>
-              <!-- Join Meetup, We will handle it later (: -->
-              <button class="button is-primary">Join In</button>
-              <!-- Not logged In Case, handle it later (: -->
-              <!-- <button :disabled="true"
-              class="button is-warning">You need authenticate in order to join</button>-->
+              <button class="button is-primary" v-if="canJoin">Join In</button>
+              <button
+                class="button is-warning"
+                v-if="!isAuthenticated"
+                :disabled="true"
+              >You need authenticate in order to join</button>
             </div>
             <!-- Thread List START -->
             <div class="content is-medium">
@@ -164,9 +164,18 @@ export default {
   computed: {
     ...mapGetters('meetups', ['meetup']),
     ...mapGetters('threads', ['threads']),
-
+    ...mapGetters('auth', ['isAuthenticated']),
+    isMeetupOwner() {
+      return this.$store.getters['auth/isMeetupOwner'](this.meetupCreator._id);
+    },
+    isMember() {
+      return this.$store.getters['auth/isMember'](this.meetup._id);
+    },
+    canJoin() {
+      return !this.isMeetupOwner && this.isAuthenticated && !this.isMember;
+    },
     meetupCreator() {
-      return this.meetup.meetupCreator;
+      return this.meetup.meetupCreator || {};
     },
     backgroundImage() {
       return (

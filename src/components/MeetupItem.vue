@@ -47,7 +47,12 @@ export default {
 </script>
 
 <style scoped>
+.card.large {
+  min-height: 100%;
+  transition: all 0.2s;
+}
 .card.large:hover {
   cursor: pointer;
+  transform: translateY(-3px);
 }
 </style>

@@ -103,5 +103,13 @@ export default {
     isAuthResolved(state) {
       return state.isAuthResolved;
     },
+    isMeetupOwner: state => ownerId => {
+      if (!state.user) return false;
+      return state.user._id === ownerId;
+    },
+    isMember: state => meetupId => {
+      if (!state.user) return false;
+      return state.user['joinedMeetups'] && state.user['joinedMeetups'].includes(meetupId);
+    },
   },
 };
