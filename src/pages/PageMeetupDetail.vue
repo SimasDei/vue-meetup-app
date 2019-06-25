@@ -100,7 +100,14 @@
                 v-if="!isAuthenticated"
                 :disabled="true"
               >You need authenticate in order to join</button>
+              <thread-create-modal
+                v-if="isMember || isMeetupOwner"
+                :btnTitle="`Welcome ${user.name}, start a new Thread`"
+                :title="'Create Thread'"
+                @threadSubmitted="createThread"
+              ></thread-create-modal>
             </div>
+
             <!-- Thread List START -->
             <div class="content is-medium">
               <h3 class="title is-3">Threads</h3>
@@ -150,9 +157,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import pageLoader from '@/mixins/pageLoader';
+import ThreadCreateModal from '@/components/ThreadCreateModal.vue';
 
 export default {
   name: 'PageMeetupDetail',
+  components: {
+    ThreadCreateModal,
+  },
   mixins: [pageLoader],
   created() {
     const meetupId = this.$route.params.id;
@@ -172,7 +183,7 @@ export default {
   computed: {
     ...mapGetters('meetups', ['meetup']),
     ...mapGetters('threads', ['threads']),
-    ...mapGetters('auth', ['isAuthenticated']),
+    ...mapGetters('auth', ['isAuthenticated', 'user']),
     isMeetupOwner() {
       return this.$store.getters['auth/isMeetupOwner'](this.meetupCreator._id);
     },
@@ -197,6 +208,10 @@ export default {
   methods: {
     ...mapActions('meetups', ['fetchMeetup', 'joinMeetup', 'leaveMeetup']),
     ...mapActions('threads', ['fetchThreads']),
+    createThread({ title, done }) {
+      console.log(title);
+      done();
+    },
   },
 };
 </script>
