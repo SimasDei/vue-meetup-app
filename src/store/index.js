@@ -15,4 +15,9 @@ export default new Vuex.Store({
     threads,
     auth,
   },
+  mutations: {
+    ADD_ITEM(state, { item, index, resource }) {
+      Vue.set(state[resource].items, index, item);
+    },
+  },
 });

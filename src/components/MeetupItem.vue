@@ -55,4 +55,9 @@ export default {
   cursor: pointer;
   transform: translateY(-3px);
 }
+
+.media-content .subtitle,
+.media-content .tag {
+  margin-top: 5px;
+}
 </style>

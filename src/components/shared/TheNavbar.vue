@@ -10,6 +10,7 @@
         aria-label="menu"
         aria-expanded="false"
         data-target="navbarBasicExample"
+        @click="toggleNav"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -17,7 +18,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu is-active">
+    <div id="navbarBasicExample" :class="['navbar-menu', {'is-active': navOpen}]">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">Home</router-link>
 
@@ -66,6 +67,11 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'TheNavbar',
+  data() {
+    return {
+      navOpen: false,
+    };
+  },
   computed: {
     ...mapGetters('auth', ['user', 'isAuthenticated']),
   },
@@ -75,6 +81,9 @@ export default {
       this.logout()
         .then(() => this.$router.history.push('/login'))
         .catch(error => console.log(error));
+    },
+    toggleNav() {
+      this.navOpen = !this.navOpen;
     },
   },
 };

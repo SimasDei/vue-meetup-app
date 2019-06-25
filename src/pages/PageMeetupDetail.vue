@@ -72,7 +72,7 @@
               <!-- Threads Start -->
               <p class="menu-label">Threads</p>
               <ul>
-                <li v-for="thread in threads" :key="thread._id">{{thread.title}}</li>
+                <li v-for="thread in orderedThreads" :key="thread._id">{{thread.title}}</li>
               </ul>
               <p class="menu-label">Who is Going</p>
               <div class="columns is-multiline is-mobile">
@@ -107,46 +107,7 @@
                 @threadSubmitted="createThread"
               ></thread-create-modal>
             </div>
-
-            <!-- Thread List START -->
-            <div class="content is-medium">
-              <h3 class="title is-3">Threads</h3>
-              <div class="box" v-for="thread in threads" :key="thread._id">
-                <!-- Thread title -->
-                <h4 id="const" class="title is-3">{{thread.title}}</h4>
-                <!-- Create new post, handle later -->
-                <form class="post-create">
-                  <div class="field">
-                    <textarea class="textarea textarea-post" placeholder="Write a post" rows="1"></textarea>
-                    <button :disabled="true" class="button is-primary m-t-sm">Send</button>
-                  </div>
-                </form>
-                <!-- Create new post END, handle later -->
-                <!-- Posts START -->
-                <article class="media post-item" v-for="post in thread.posts" :key="post._id">
-                  <figure class="media-left is-rounded user-image">
-                    <p class="image is-32x32">
-                      <img class="is-rounded" :src="post.user.avatar">
-                    </p>
-                  </figure>
-                  <div class="media-content">
-                    <div class="content is-medium">
-                      <div class="post-content">
-                        <!-- Post User Name -->
-                        <strong class="author">{{post.user.name}}</strong>
-                        {{' '}}
-                        <!-- Post Updated at -->
-                        <small class="post-time">{{post.updatedAt | formatDate('LLL')}}</small>
-                        <br>
-                        <p class="post-content-message">{{post.text}}</p>
-                      </div>
-                    </div>
-                  </div>
-                </article>
-                <!-- Posts END -->
-              </div>
-            </div>
-            <!-- Thread List END -->
+            <thread-list :threads="orderedThreads" :canMakePost="canMakePost"></thread-list>
           </div>
         </div>
       </div>
@@ -156,13 +117,16 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
 import pageLoader from '@/mixins/pageLoader';
 import ThreadCreateModal from '@/components/ThreadCreateModal.vue';
+import ThreadList from '@/components/ThreadList.vue';
 
 export default {
   name: 'PageMeetupDetail',
   components: {
     ThreadCreateModal,
+    ThreadList,
   },
   mixins: [pageLoader],
   created() {
@@ -196,6 +160,9 @@ export default {
     meetupCreator() {
       return this.meetup.meetupCreator || {};
     },
+    canMakePost() {
+      return this.isAuthenticated && (this.isMember || this.isMeetupOwner);
+    },
     backgroundImage() {
       return (
         `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(${
@@ -204,13 +171,23 @@ export default {
         'linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url(https://images.unsplash.com/photo-1560153058-c0b578291652?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto'
       );
     },
+    orderedThreads() {
+      const orderedThreads = this.threads;
+      return orderedThreads.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      );
+    },
   },
   methods: {
     ...mapActions('meetups', ['fetchMeetup', 'joinMeetup', 'leaveMeetup']),
-    ...mapActions('threads', ['fetchThreads']),
+    ...mapActions('threads', ['fetchThreads', 'postThread']),
     createThread({ title, done }) {
-      console.log(title);
-      done();
+      this.postThread({ title, meetupId: this.meetup._id }).then(() => {
+        this.$toasted.success('Thread successfully Created!', {
+          duration: 3000,
+        });
+        done();
+      });
     },
   },
 };
@@ -307,46 +284,4 @@ li {
 .footer {
   background-color: white;
 }
-// Post Create Input START
-.textarea-post {
-  padding-bottom: 30px;
-}
-.post-create {
-  margin-bottom: 15px;
-}
-// Post Create END
-// Thread List START
-.content {
-  figure {
-    margin-bottom: 0;
-  }
-}
-.media-content-threads {
-  background-color: #f1f1f1;
-  padding: 3px 20px;
-  border-radius: 10px;
-  margin-right: 40px;
-  width: 100px;
-}
-.media-left.user-image {
-  margin: 0;
-  margin-right: 15px;
-}
-.media + .media {
-  border: none;
-  margin-top: 0;
-}
-.post-content {
-  margin: 0;
-  &-message {
-    font-size: 16px;
-  }
-  .author {
-    font-size: 18px;
-  }
-  .post-time {
-    font-size: 16px;
-  }
-}
-// Thread List END
 </style>
