@@ -86,7 +86,11 @@
             <div class="content is-medium">
               <h3 class="title is-3">About the Meetup</h3>
               <p>{{meetup.description}}</p>
-              <button class="button is-primary" v-if="canJoin">Join In</button>
+              <button
+                class="button is-primary"
+                v-if="canJoin"
+                @click="joinMeetup(meetup._id)"
+              >Join In</button>
               <button
                 class="button is-warning"
                 v-if="!isAuthenticated"
@@ -187,7 +191,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('meetups', ['fetchMeetup']),
+    ...mapActions('meetups', ['fetchMeetup', 'joinMeetup']),
     ...mapActions('threads', ['fetchThreads']),
   },
 };

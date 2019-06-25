@@ -21,6 +21,9 @@ export default {
       }
       state[itemType] = [];
     },
+    ADD_USER_TO_MEETUP(state, joinedPeople) {
+      state.item.joinedPeople = joinedPeople;
+    },
   },
   actions: {
     fetchMeetups({ commit }) {
@@ -52,6 +55,18 @@ export default {
       return axiosInstance
         .post('/api/v1/meetups', meetup)
         .then(res => res.data)
+        .catch(err => console.log(err));
+    },
+    joinMeetup({ state, rootState, commit, dispatch }, meetupId) {
+      const user = rootState.auth.user;
+      return axiosInstance
+        .post(`/api/v1/meetups/${meetupId}/join`)
+        .then(() => {
+          dispatch('auth/addMeetupToAtuhUser', meetupId, { root: true });
+          const joinedPeople = state.item.joinedPeople;
+          commit('ADD_USER_TO_MEETUP', [...joinedPeople, user]);
+          return true;
+        })
         .catch(err => console.log(err));
     },
   },

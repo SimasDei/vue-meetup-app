@@ -27,6 +27,9 @@ export default {
     SET_AUTH_STATE(state, value) {
       state.isAuthResolved = value;
     },
+    SET_MEETUPS_TO_AUTH_USER(state, meetups) {
+      state.user.joinedMeetups = meetups;
+    },
   },
   actions: {
     async register(payload) {
@@ -71,6 +74,10 @@ export default {
         console.log({ msg: error });
         return error;
       }
+    },
+    addMeetupToAtuhUser({ commit, state }, meetupId) {
+      const userMeetups = [...state.user['joinedMeetups'], meetupId];
+      commit('SET_MEETUPS_TO_AUTH_USER', userMeetups);
     },
     async logout({ commit }) {
       /**
