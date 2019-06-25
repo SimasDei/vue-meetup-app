@@ -3,7 +3,8 @@ export default {
     el.__AutoResizer__ = () => {
       setTimeout(() => {
         el.style.cssText = 'height: auto';
-        el.style.cssText = `height: ${el.scrollHeight}px`;
+        const height = el.scrollHeight + 2;
+        el.style.cssText = `height: ${height}px`;
       }, 0);
     };
     el.addEventListener('keydown', el.__AutoResizer__);
