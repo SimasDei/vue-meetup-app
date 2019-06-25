@@ -75,9 +75,15 @@ export default {
         return error;
       }
     },
-    addMeetupToAtuhUser({ commit, state }, meetupId) {
+    addMeetupToAuthUser({ commit, state }, meetupId) {
       const userMeetups = [...state.user['joinedMeetups'], meetupId];
       commit('SET_MEETUPS_TO_AUTH_USER', userMeetups);
+    },
+    removeMeetupToAuthUser({ commit, state }, meetupId) {
+      const userMeetupsIds = [...state.user['joinedMeetups']];
+      const index = userMeetupsIds.findIndex(userMeetupId => userMeetupId === meetupId);
+      userMeetupsIds.splice(index, 1);
+      commit('SET_MEETUPS_TO_AUTH_USER', userMeetupsIds);
     },
     async logout({ commit }) {
       /**

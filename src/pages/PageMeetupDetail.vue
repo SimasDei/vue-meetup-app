@@ -22,7 +22,11 @@
           </article>
         </div>
         <div class="is-pulled-right">
-          <button class="button is-danger" v-if="isMember">Leave Meetup</button>
+          <button
+            class="button is-danger"
+            v-if="isMember"
+            @click="leaveMeetup(meetup._id)"
+          >Leave Meetup</button>
         </div>
       </div>
     </section>
@@ -191,7 +195,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('meetups', ['fetchMeetup', 'joinMeetup']),
+    ...mapActions('meetups', ['fetchMeetup', 'joinMeetup', 'leaveMeetup']),
     ...mapActions('threads', ['fetchThreads']),
   },
 };

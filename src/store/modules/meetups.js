@@ -62,12 +62,23 @@ export default {
       return axiosInstance
         .post(`/api/v1/meetups/${meetupId}/join`)
         .then(() => {
-          dispatch('auth/addMeetupToAtuhUser', meetupId, { root: true });
+          dispatch('auth/addMeetupToAuthUser', meetupId, { root: true });
           const joinedPeople = state.item.joinedPeople;
           commit('ADD_USER_TO_MEETUP', [...joinedPeople, user]);
           return true;
         })
         .catch(err => console.log(err));
+    },
+    leaveMeetup({ state, rootState, commit, dispatch }, meetupId) {
+      const user = rootState.auth.user;
+
+      return axiosInstance.post(`/api/v1/meetups/${meetupId}/leave`).then(() => {
+        dispatch('auth/removeMeetupToAuthUser', meetupId, { root: true });
+        const joinedPeople = state.item.joinedPeople;
+        const index = joinedPeople.findIndex(jUser => jUser._id === user._id);
+        joinedPeople.splice(index, 1);
+        commit('ADD_USER_TO_MEETUP', joinedPeople);
+      });
     },
   },
   getters: {
