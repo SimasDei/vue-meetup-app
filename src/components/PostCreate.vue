@@ -35,7 +35,7 @@ export default {
         threadId: this.threadId,
       };
       this.sendPost(formData).then(createdPost => {
-        this.$root.socket.emit('meetup/postSave', createdPost);
+        this.$socket.emit('meetup/postSave', createdPost);
         this.text = null;
       });
     },

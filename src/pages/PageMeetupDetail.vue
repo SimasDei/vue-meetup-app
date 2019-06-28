@@ -143,7 +143,7 @@ export default {
         console.log(error);
         this.dataLoaded = true;
       });
-    this.$root.socket.on('meetup/postPublished', function(post) {
+    this.$socket.on('meetup/postPublished', function(post) {
       console.log(post);
     });
   },

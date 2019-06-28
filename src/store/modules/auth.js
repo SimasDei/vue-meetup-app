@@ -32,7 +32,7 @@ export default {
     },
   },
   actions: {
-    async register(payload) {
+    async register(context, payload) {
       try {
         return axios.post('/api/v1/users/register', payload);
       } catch (error) {
