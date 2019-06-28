@@ -17,7 +17,7 @@
               <!-- Post User Name -->
               <strong class="author">{{post.user.name}}</strong>
               <!-- Post Updated at -->
-              <small class="post-time">{{post.updatedAt | formatDate('LLL')}}</small>
+              <small class="post-time">{{post.updatedAt | fromNow}}</small>
               <br>
               <p class="post-content-message">{{post.text}}</p>
             </div>
