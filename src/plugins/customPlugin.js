@@ -1,12 +1,12 @@
 const customPlugin = {
-  install(Vue, options) {
+  install(Vue) {
     Vue.myGlobalMethod = function() {
       alert('Plugin Altetarino');
     };
-    Vue.myCusomProperty = 'Custrom properterino';
+    Vue.myCustomProperty = 'Custrom properterino';
 
     Vue.directive('blue-color', {
-      bind(el, binding) {
+      bind(el) {
         el.style.color = 'blue';
       },
     });
@@ -17,9 +17,7 @@ const customPlugin = {
           custom_message: 'Ahoy mr. Beaver o/',
         };
       },
-      created() {
-        console.log('Custom Mixin inside Custom Plugin!');
-      },
+      created() {},
       methods: {
         scream() {
           alert(this.custom_message);
