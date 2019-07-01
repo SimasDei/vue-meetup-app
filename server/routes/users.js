@@ -8,7 +8,7 @@ router.get('', UsersCtrl.getUsers);
 router.get('/me', AuthCtrl.onlyAuthUser, UsersCtrl.getCurrentUser);
 
 router.get('/me/activity', AuthCtrl.onlyAuthUser, UsersCtrl.getUserActivity);
-router.get('/:id', AuthCtrl.onlyAuthUser, UsersCtrl.updateUser);
+router.patch('/:id', AuthCtrl.onlyAuthUser, UsersCtrl.updateUser);
 
 router.post('/register', UsersCtrl.register);
 router.post('/login', UsersCtrl.login);

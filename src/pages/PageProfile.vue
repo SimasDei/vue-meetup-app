@@ -13,10 +13,10 @@
               <span class="title is-bold">{{user.name}}</span>
               <br />
               <!-- Here will be user update functionality -->
-              <user-update-modal :authUser="user"></user-update-modal>
+              <user-update-modal :authUser="user" @userSubmitted="requestUserUpdate"></user-update-modal>
               <br />
             </p>
-            <p class="tagline">I am very productive and good programmer</p>
+            <p class="tagline">{{user.info}}</p>
           </div>
           <div
             :class="{isActive: activeTab === 'meetups'}"
@@ -147,6 +147,20 @@ export default {
   },
   methods: {
     ...mapActions('stats', ['fetchUserStats']),
+    ...mapActions('auth', ['updateUser']),
+    requestUserUpdate({ user, done }) {
+      this.updateUser(user)
+        .then(() => {
+          this.$toasted.success('Profile successfuly Updated', {
+            duration: 3000,
+          });
+          done();
+        })
+        .catch(error => {
+          console.log(error);
+          done();
+        });
+    },
   },
 };
 </script>

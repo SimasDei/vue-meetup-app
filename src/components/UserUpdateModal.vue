@@ -29,7 +29,7 @@
           </form>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success">Save changes</button>
+          <button class="button is-success" @click="emitUser">Save changes</button>
           <button class="button" @click="isOpen = !isOpen">Cancel</button>
         </footer>
       </div>
@@ -45,6 +45,14 @@ export default {
       isOpen: false,
       user: { ...this.authUser },
     };
+  },
+  methods: {
+    emitUser() {
+      this.$emit('userSubmitted', {
+        user: this.user,
+        done: () => (this.isOpen = false),
+      });
+    },
   },
 };
 </script>

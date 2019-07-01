@@ -75,6 +75,16 @@ export default {
         return error;
       }
     },
+    updateUser({ commit }, user) {
+      return axiosInstance
+        .patch(`/api/v1/users/${user._id}`, user)
+        .then(res => {
+          const user = res.data;
+          commit('SET_USER', user);
+          return user;
+        })
+        .catch(error => console.log(error));
+    },
     addMeetupToAuthUser({ commit, state }, meetupId) {
       const userMeetups = [...state.user['joinedMeetups'], meetupId];
       commit('SET_MEETUPS_TO_AUTH_USER', userMeetups);
