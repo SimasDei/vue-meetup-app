@@ -31,7 +31,7 @@
             <router-link class="navbar-item" to="/about">About</router-link>
             <router-link class="navbar-item" to="/jobs">Jobs</router-link>
             <router-link class="navbar-item" to="/contact">Contact</router-link>
-            <hr class="navbar-divider">
+            <hr class="navbar-divider" />
             <router-link class="navbar-item" to="/report">Report an issue</router-link>
           </div>
         </div>
@@ -44,8 +44,8 @@
         <div v-if="user" class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">Account</a>
           <div class="navbar-dropdown">
-            <router-link to="/profile" class="navbar-item">Profile</router-link>
-            <hr class="navbar-divider">
+            <router-link to="/me" class="navbar-item">Profile</router-link>
+            <hr class="navbar-divider" />
             <a class="navbar-item" @click="onLogout">Logout</a>
           </div>
         </div>

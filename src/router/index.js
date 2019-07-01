@@ -9,6 +9,7 @@ import PageSecret from '@/pages/PageSecret.vue';
 import PageMeetupFind from '@/pages/PageMeetupFind.vue';
 import PageLogin from '@/pages/PageLogin.vue';
 import PageRegister from '@/pages/PageRegister.vue';
+import PageProfile from '@/pages/PageProfile.vue';
 import PageNotFound from '@/pages/PageNotFound.vue';
 import PageNotAuthenticated from '@/pages/PageNotAuthenticated.vue';
 
@@ -54,6 +55,11 @@ const router = new Router({
       name: 'PageRegister',
       component: PageRegister,
       meta: { onlyGuestUser: true },
+    },
+    {
+      path: '/me',
+      name: 'PageProfile',
+      component: PageProfile,
     },
     {
       path: '/401',

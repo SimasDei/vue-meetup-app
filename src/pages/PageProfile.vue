@@ -12,7 +12,7 @@
           <div class="column is-4-tablet is-10-mobile name">
             <p>
               <!-- TODO: Display user name here -->
-              <span class="title is-bold">John Example</span>
+              <span class="title is-bold">{{user.name}}</span>
               <br />
               <!-- Here will be user update functionality -->
               <button class="button is-primary is-outlined m-t-sm">Update Info</button>
@@ -23,17 +23,17 @@
           </div>
           <!-- TODO: Set Active Tab to 'meetups' and class to 'isActive' -->
           <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">2</p>
+            <p class="stat-val">{{meetups.count}}</p>
             <p class="stat-key">Meetups</p>
           </div>
           <!-- TODO: Set Active Tab to 'threads' and class to 'isActive' -->
           <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">4</p>
+            <p class="stat-val">{{threads.count}}</p>
             <p class="stat-key">Threads</p>
           </div>
           <!-- TODO: Set Active Tab to 'posts' and class to 'isActive' -->
           <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
-            <p class="stat-val">3</p>
+            <p class="stat-val">{{posts.count}}</p>
             <p class="stat-key">Posts</p>
           </div>
         </div>
@@ -42,7 +42,7 @@
       <div class="columns is-mobile is-multiline">
         <!-- TODO: Iterate over meetups -->
         <div class="column is-3-tablet is-6-mobile">
-          <!-- THREADS -->
+          <!-- MEETUPS -->
           <div class="card">
             <div class="card-image">
               <figure class="image is-4by3">
@@ -122,10 +122,21 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'PageProgile',
-  
-}
+  created() {
+    this.fetchUserStats().then(stats => console.log(stats));
+  },
+  computed: {
+    ...mapGetters('stats', ['meetups', 'threads', 'posts']),
+    ...mapGetters('auth', ['user']),
+  },
+  methods: {
+    ...mapActions('stats', ['fetchUserStats']),
+  },
+};
 </script>
 <!-- Styles -->
 <style scoped>
