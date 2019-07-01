@@ -1,10 +1,10 @@
 <template>
-  <div id="app" v-if="isAuthResolved">
-    <TheNavbar/>
+  <div id="app" v-if="isAuthResolved && locationResolved">
+    <TheNavbar />
     <main class="page-wrapper">
       <router-view></router-view>
     </main>
-    <TheFooter/>
+    <TheFooter />
   </div>
 </template>
 
@@ -19,11 +19,16 @@ export default {
     TheNavbar,
     TheFooter,
   },
+  created() {
+    this.fetchMetaData();
+  },
   computed: {
     ...mapGetters('auth', ['isAuthResolved']),
+    ...mapGetters('meta', ['locationResolved']),
   },
   methods: {
     ...mapActions('auth', ['getAuthUser']),
+    ...mapActions('meta', ['fetchMetaData']),
   },
 };
 </script>

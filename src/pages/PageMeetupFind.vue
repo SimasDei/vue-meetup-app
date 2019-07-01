@@ -1,16 +1,16 @@
 <template>
   <div v-if="pageLoader_dataLoaded">
     <div class="lookup-prebody">
-      <AppHero/>
+      <AppHero />
       <div class="meetup-lookup-wrap">
         <div class="meetup-lookup centered">
           <div class="level">
             <div class="level-left">
-              <div class="level-item">
-                <input type="text" class="input" placeholder="New York">
+              <div class="level-item" v-if="location && meetups && meetups.length">
+                <input type="text" class="input" v-model="location" />
               </div>
               <div class="level-item">
-                <span>Meetups in New York, USA</span>
+                <span>Meetups in {{meetups[0].location}}</span>
               </div>
             </div>
             <div class="level-right">
@@ -74,6 +74,7 @@ export default {
   name: 'PageMeetupFind',
   data() {
     return {
+      searchedLocation: this.location,
       dataLoaded: false,
     };
   },
@@ -87,6 +88,7 @@ export default {
   },
   computed: {
     ...mapGetters('meetups', ['meetups']),
+    ...mapGetters('meta', ['location']),
   },
   methods: {
     ...mapActions('meetups', ['fetchMeetups']),
