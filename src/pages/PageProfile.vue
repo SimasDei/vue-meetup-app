@@ -5,65 +5,69 @@
         <div class="columns is-mobile is-multiline">
           <div class="column is-2">
             <figure class="image header-icon user-profile-image">
-              <!-- TODO: Get user avatar here -->
-              <img class="is-rounded" src />
+              <img class="is-rounded" :src="user.avatar" />
             </figure>
           </div>
           <div class="column is-4-tablet is-10-mobile name">
             <p>
-              <!-- TODO: Display user name here -->
               <span class="title is-bold">{{user.name}}</span>
               <br />
               <!-- Here will be user update functionality -->
               <button class="button is-primary is-outlined m-t-sm">Update Info</button>
               <br />
             </p>
-            <!-- TODO: User Info Here if any -->
             <p class="tagline">I am very productive and good programmer</p>
           </div>
-          <!-- TODO: Set Active Tab to 'meetups' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            :class="{isActive: activeTab === 'meetups'}"
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            @click="activeTab = 'meetups'"
+          >
             <p class="stat-val">{{meetups.count}}</p>
             <p class="stat-key">Meetups</p>
           </div>
-          <!-- TODO: Set Active Tab to 'threads' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            :class="{isActive: activeTab === 'threads'}"
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            @click="activeTab = 'threads'"
+          >
             <p class="stat-val">{{threads.count}}</p>
             <p class="stat-key">Threads</p>
           </div>
-          <!-- TODO: Set Active Tab to 'posts' and class to 'isActive' -->
-          <div class="stats-tab column is-2-tablet is-4-mobile has-text-centered">
+          <div
+            :class="{isActive: activeTab === 'posts'}"
+            class="stats-tab column is-2-tablet is-4-mobile has-text-centered"
+            @click="activeTab = 'posts'"
+          >
             <p class="stat-val">{{posts.count}}</p>
             <p class="stat-key">Posts</p>
           </div>
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'meetups' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over meetups -->
-        <div class="column is-3-tablet is-6-mobile">
+      <div class="columns is-mobile is-multiline" v-if="activeTab === 'meetups'">
+        <div
+          class="column is-3-tablet is-6-mobile"
+          v-for="meetup in meetups.data"
+          :key="meetup._id"
+        >
           <!-- MEETUPS -->
           <div class="card">
             <div class="card-image">
               <figure class="image is-4by3">
-                <!-- TODO: Display Meetup Image -->
-                <img src />
+                <img :src="meetup.image" />
               </figure>
             </div>
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display Meetup title -->
-                  <p class="title is-4">Nice Meetup</p>
-                  <!-- TODO: Display Category name -->
+                  <p class="title is-4">{{meetup.title}}</p>
                   <p class="subtitle is-6">
-                    <span class="tag is-dark subtitle">Sport</span>
+                    <span class="tag is-dark subtitle">{{meetup.category.name}}</span>
                   </p>
                 </div>
               </div>
               <div class="content">
-                <!-- TODO: Display Meetup shortInfo -->
-                <p>Some short info</p>
+                <p>{{meetup.shortInfo}}</p>
               </div>
             </div>
             <footer class="card-footer">
@@ -74,17 +78,18 @@
           <br />
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'threads' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over threads -->
-        <div class="column is-3-tablet is-6-mobile">
+      <div class="columns is-mobile is-multiline" v-if="activeTab === 'threads'">
+        <div
+          class="column is-3-tablet is-6-mobile"
+          v-for="thread in threads.data"
+          :key="thread._id"
+        >
           <!-- THREADS -->
           <div class="card">
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display thread thread title -->
-                  <p class="title is-4">Some title</p>
+                  <p class="title is-4">{{thread.title}}</p>
                 </div>
               </div>
             </div>
@@ -96,17 +101,14 @@
           <br />
         </div>
       </div>
-      <!-- TODO: Display this div when activeTab === 'posts' -->
-      <div class="columns is-mobile is-multiline">
-        <!-- TODO: Iterate over posts -->
-        <div class="column is-3-tablet is-6-mobile">
+      <div class="columns is-mobile is-multiline" v-if="activeTab === 'posts'">
+        <div class="column is-3-tablet is-6-mobile" v-for="post in posts.data" :key="post._id">
           <!-- THREADS -->
           <div class="card">
             <div class="card-content">
               <div class="media">
                 <div class="media-content">
-                  <!-- TODO: Display post text -->
-                  <p class="title is-4">Some Text</p>
+                  <p class="title is-4">{{post.text}}</p>
                 </div>
               </div>
             </div>
@@ -126,6 +128,11 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'PageProgile',
+  data() {
+    return {
+      activeTab: 'meetups',
+    };
+  },
   created() {
     this.fetchUserStats().then(stats => console.log(stats));
   },
