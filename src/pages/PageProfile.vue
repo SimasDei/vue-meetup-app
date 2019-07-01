@@ -13,7 +13,7 @@
               <span class="title is-bold">{{user.name}}</span>
               <br />
               <!-- Here will be user update functionality -->
-              <button class="button is-primary is-outlined m-t-sm">Update Info</button>
+              <user-update-modal :authUser="user"></user-update-modal>
               <br />
             </p>
             <p class="tagline">I am very productive and good programmer</p>
@@ -126,8 +126,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
+import UserUpdateModal from '@/components/UserUpdateModal.vue';
+
 export default {
   name: 'PageProgile',
+  components: {
+    UserUpdateModal,
+  },
   data() {
     return {
       activeTab: 'meetups',
