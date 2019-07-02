@@ -7,7 +7,7 @@
           <div class="level">
             <div class="level-left">
               <div class="level-item" v-if="location && meetups && meetups.length">
-                <input type="text" class="input" v-model="location" />
+                <input type="text" class="input" v-model="searchedLocation" />
               </div>
               <div class="level-item">
                 <span>Meetups in {{meetups[0].location}}</span>
@@ -85,6 +85,9 @@ export default {
         this.pageLoader_resolveData();
       }, 1500),
     );
+    if (this.location) {
+      this.searchedLocation = this.location;
+    }
   },
   computed: {
     ...mapGetters('meetups', ['meetups']),

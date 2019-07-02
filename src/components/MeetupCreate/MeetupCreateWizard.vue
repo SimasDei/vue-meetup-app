@@ -21,6 +21,7 @@
       >Next</button>
       <button v-else class="button is-primary" @click="submitData">Confirm</button>
     </div>
+    <pre><code>{{form}}</code></pre>
   </div>
 </template>
 
