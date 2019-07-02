@@ -7,7 +7,12 @@
           <div class="level">
             <div class="level-left">
               <div class="level-item" v-if="location && meetups && meetups.length">
-                <input type="text" class="input" v-model="searchedLocation" />
+                <input
+                  type="text"
+                  class="input"
+                  v-model="searchedLocation"
+                  @keyup.enter="filteredSearch"
+                />
               </div>
               <div class="level-item">
                 <span>Meetups in {{meetups[0].location}}</span>
@@ -76,6 +81,7 @@ export default {
     return {
       searchedLocation: this.location,
       dataLoaded: false,
+      filter: {},
     };
   },
   mixins: [pageLoader],
@@ -95,6 +101,15 @@ export default {
   },
   methods: {
     ...mapActions('meetups', ['fetchMeetups']),
+    filteredSearch() {
+      if (this.location) {
+        this.filter['location'] = this.location
+          .toLowerCase()
+          .replace(/[\s,]+/g, '')
+          .trim();
+        this.fetchMeetups({ filter: this.filter });
+      }
+    },
   },
 };
 </script>

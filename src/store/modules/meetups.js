@@ -1,5 +1,6 @@
 import axios from 'axios';
 import axiosInstance from '../../services/axios';
+import { applyFilters } from '@/helpers';
 
 export default {
   namespaced: true,
@@ -26,10 +27,11 @@ export default {
     },
   },
   actions: {
-    fetchMeetups({ commit }) {
+    fetchMeetups({ commit }, options = {}) {
       commit('CLEAR_ITEMS', 'items');
+      const url = applyFilters('/api/v1/meetups', options.filter);
       axios
-        .get('/api/v1/meetups')
+        .get(url)
         .then(res => {
           const meetups = res.data;
           commit('FETCH_MEETUPS', meetups);
